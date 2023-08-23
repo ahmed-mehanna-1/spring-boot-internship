@@ -1,33 +1,42 @@
 package intern.intro.service.impl;
 
-import intern.intro.model.Course;
 import intern.intro.model.Student;
+import intern.intro.model.StudentCourse;
+import intern.intro.repository.CourseRepository;
+import intern.intro.repository.StudentCourseRepository;
+import intern.intro.repository.StudentRepository;
 import intern.intro.service.StudentService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class StudentServiceImpl implements StudentService {
-    private List<Student> students;
 
-    public StudentServiceImpl() {
-        this.students = new ArrayList<>();
+    private final StudentRepository studentRepository;
+    private final StudentCourseRepository studentCourseRepository;
+    private final CourseRepository courseRepository;
+
+    public StudentServiceImpl(StudentRepository studentRepository, StudentCourseRepository studentCourseRepository, CourseRepository courseRepository) {
+
+        this.studentRepository = studentRepository;
+        this.studentCourseRepository = studentCourseRepository;
+        this.courseRepository = courseRepository;
     }
 
     @Override
-    public Student addCourse(Integer studentId, Course course) {
-        if (studentId >= students.size() || studentId < 0)
-            throw new RuntimeException("Invalid student id");
-        students.get(studentId).addCourse(course);
-        return students.get(studentId);
+    public boolean addCourse(Integer studentId, Integer courseId) {
+        if (!studentRepository.existsById(studentId) || !courseRepository.existsById(courseId))
+            throw new RuntimeException("IDs are fault");
+        StudentCourse studentCourse = new StudentCourse();
+        studentCourse.setStudentId(studentId);
+        studentCourse.setCourseId(courseId);
+        studentCourse.setTerm("Spring");
+        studentCourseRepository.save(studentCourse);
+        return true;
     }
 
     @Override
     public Student addStudent(Student student) {
-        students.add(student);
-        return student;
+        return studentRepository.save(student);
     }
 
     @Override

@@ -25,10 +25,11 @@ public class StudentController {
         return student;
     }
 
-    @PostMapping("add/course/{student-id}")
-    public Student addCourse(@RequestBody Course course,
-                             @PathVariable("student-id") Integer studentId) {
-        return studentService.addCourse(studentId, course);
+    @PostMapping("add/course/{student-id}/{course-id}")
+    public String addCourse(@PathVariable("student-id") Integer studentId,
+                             @PathVariable("course-id") Integer courseId) {
+        studentService.addCourse(studentId, courseId);
+        return "Success";
     }
 
 }

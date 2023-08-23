@@ -1,19 +1,23 @@
 package intern.intro.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+@Entity
+@Table(name = "course")
 @Data
 public class Course {
-    private String name;
-    private String code;
-    private int hours;
+    @Id
+    @Column(name = "course_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-    public Course(String name, String code, int hours) {
-        this.name = name;
-        this.code = code;
-        this.hours = hours;
-    }
+    @Column(name = "code")
+    private String code;
+
+    @Column(name = "hours")
+    private int hours;
 }
